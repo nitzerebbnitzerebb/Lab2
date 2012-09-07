@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using SportsStore.WebUI.Infrastructure;
+using SportsStore.Domain.Entities;
+using SportsStore.WebUI.Binders;
 
 namespace SportsStore.WebUI
 {
@@ -22,6 +24,11 @@ namespace SportsStore.WebUI
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapRoute(null,
+                "", // Only matches the empty URL (i.e. /)
+                new { controller = "Product", action = "List", category = (string)null, page = 1 }
+            );
+
             routes.MapRoute(
                 "ProductPaging", // Route name
                 "Page{page}", // URL with parameters
@@ -29,9 +36,21 @@ namespace SportsStore.WebUI
             );
 
             routes.MapRoute(
-                "Default", // Route name
-                "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "Product", action = "List", id = UrlParameter.Optional } // Parameter defaults
+                "Categoryfiltering", // Route name
+                "{category}", // URL with parameters
+                new { controller = "Product", action = "List", page = 1 } // Parameter defaults
+            );
+
+            routes.MapRoute(
+                "CategoryAndPage", // Route name
+                "{category}/Page{page}", // URL with parameters
+                new { controller = "Product", action = "List" }, // Parameter defaults
+                new { page = @"\d+"}
+            );
+
+            routes.MapRoute(
+                null,
+                "{controller}/{action}"
             );
 
         }
@@ -44,6 +63,8 @@ namespace SportsStore.WebUI
             RegisterRoutes(RouteTable.Routes);
 
             ControllerBuilder.Current.SetControllerFactory(new NinjectControllerFactory());
+
+            ModelBinders.Binders.Add(typeof(Cart), new CartModelBinder());
         }
     }
 }
