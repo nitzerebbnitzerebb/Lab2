@@ -54,6 +54,8 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountControllerTests.cs" />
+    <Compile Include="AdminControllerTests.cs" />
     <Compile Include="CartControllerTests.cs" />
     <Compile Include="CartTests.cs" />
     <Compile Include="HtmlHelpersTests.cs" />
