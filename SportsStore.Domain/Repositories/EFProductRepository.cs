@@ -18,6 +18,8 @@ namespace SportsStore.Domain.Repositories
         {
             if (product.ProductID == 0)
                 context.Products.Add(product);
+            else
+                context.Entry(product).State = System.Data.EntityState.Modified;
             context.SaveChanges();
         }
 
